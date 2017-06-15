@@ -1,0 +1,11 @@
+# Shortcuts
+alias ..="cd ../"
+alias ...="cd ../../"
+alias bp="$EDITOR ~/.bash_profile"
+alias als="$EDITOR ~/.aliases"
+alias be="bundle exec "
+
+# Git
+alias gs="git status"
+alias gcm="git commit -m"
+alias glog="git log --oneline -20"

@@ -1,0 +1,210 @@
+function f {
+  if [ -n "$1" ]; then
+    history | grep "$1"
+  else
+    history
+  fi
+}
+
+function tag {
+  if [[ -z "$1" ]]; then
+    echo "Usage:"
+    echo "  tag 1.2.3"
+  else
+    git tag -a "$1" -m "$1"
+    git push origin master --tags
+  fi
+}
+
+function server {
+  if [ -n "$1" ]; then
+    python -m SimpleHTTPServer "$1"
+  else
+    python -m SimpleHTTPServer 3000
+  fi
+}
+
+function wf {
+  if [ -n "$1" ]; then
+    ls -alh | grep "$1"
+  else
+    ls -alh
+  fi
+}
+
+function pr {
+  local dir="$PWD"
+
+  until [[ -z "$dir" ]]; do
+    if [ -d ./.git ]; then
+      break
+    else
+      cd ..
+    fi
+    dir="${dir%/*}"
+  done
+}
+
+function ignore {
+  if [ -f .gitignore ]; then
+    if [ -n "$1" ]; then
+      echo "$1" >> .gitignore
+    fi
+  else
+    read -p "No .gitignore file in this directory. Would you like to create one? " answer
+    case $answer in
+        [Yy]* )
+            touch .gitignore
+            echo "$1" >> .gitignore
+          ;;
+        [Nn]* );;
+        * ) echo "Please answer yes or no.";;
+    esac
+  fi
+  if [ -f .gitignore ]; then
+    cat .gitignore
+  fi
+}
+
+function stfu {
+  d
+  cd tractor_beam
+  s
+  fml
+}
+
+function stfd {
+  cd ~/Sites/ng-salt/dev2
+  vagrant halt
+}
+
+function fit {
+  if [ -n "$1" ]; then
+    f git | grep "$1"
+  else
+    f git
+  fi
+}
+
+function hit {
+  if [ -n "$1" ]; then
+    f heroku | grep "$1"
+  else
+    f heroku
+  fi
+}
+
+function s {
+ local file; file="."
+ local flag; flag="-n"
+ local project_file; project_file=$(find . -maxdepth 1 -type f -name "*.sublime")
+
+ if [ -n "$project_file" ]; then
+   atom --project "$project_file"
+ else
+   if [[ -n "$1" && "$1" != "-a" ]]; then
+     touch "$1"
+     file="$1"
+   fi
+
+   if [[ "$1" == "-a" || "$2" == "-a" ]]; then
+     flag="-a"
+   fi
+
+   subl "$file" "$flag"
+ fi
+}
+
+function sp {
+  SPEC_ROOT="spec"
+  F="$2"
+  LINE=""
+  if [[ -n "$3" ]]; then
+    for LINE; do true; done
+    LINE=":${LINE}"
+  fi
+  if [[ -n "$F" ]]; then
+    SUFFIX="_spec.rb"
+  else
+    SUFFIX=""
+  fi
+
+  case "$1" in
+  "c" )
+    if [[ -n "$F" ]]; then
+      F="${F}_controller"
+    fi
+    bundle exec rspec "${SPEC_ROOT}/controllers/${F}${SUFFIX}${LINE}" ;;
+  "m" )
+    bundle exec rspec "${SPEC_ROOT}/models/${F}${SUFFIX}${LINE}";;
+  "mm" )
+    if [[ -n "$F" ]]; then
+      F="${F}_mailer"
+    fi
+    bundle exec rspec "${SPEC_ROOT}/mailers/${F}${SUFFIX}${LINE}";;
+  "w" )
+    if [[ -n "$F" ]]; then
+      F="${F}_worker"
+    fi
+    bundle exec rspec "${SPEC_ROOT}/workers/${F}${SUFFIX}${LINE}" ;;
+  "" )
+    bundle exec rspec "${SPEC_ROOT}";;
+  * )
+    bundle exec rspec "${SPEC_ROOT}/${1}/${2}${SUFFIX}${LINE}";;
+  esac
+}
+
+function o {
+  if [ -n "$1" ]; then
+    open "$1"
+  else
+    open .
+  fi
+}
+
+function a {
+  less ~/.aliases
+}
+
+function af {
+  if [ -n "$1" ]; then
+    a | grep "$1"
+  else
+    a
+  fi
+}
+
+function func {
+  less ~/.functions
+}
+
+function reload {
+  source ~/.bash_profile
+  echo "Reloaded."
+}
+
+function ga {
+  if [ -n "$1" ]; then
+    git add "$1"
+  # else
+  #   git add --all
+  fi
+}
+
+function copy {
+  if [ -n "$1" ]; then
+    if [ -f "$1" ] && [ ! -d "$1" ]; then
+      cat "$1" | pbcopy
+      echo "copied!"
+    else
+      if [ -d "$1" ]; then
+        echo "$1 is a directory"
+      else
+        echo "No such file $1"
+      fi
+      echo
+      echo "Usage:"
+      echo "  copy <filename>"
+    fi
+  fi
+}

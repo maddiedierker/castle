@@ -1,6 +1,6 @@
 # Editors
-export EDITOR="vim"
-export BUNDLER_EDITOR="vim"
+export EDITOR="atom"
+export BUNDLER_EDITOR="atom"
 
 # Aliases
 if [ -f ~/.aliases ]; then
